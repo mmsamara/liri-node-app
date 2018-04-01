@@ -3,33 +3,74 @@ require("dotenv").config();
 var keys = require("./keys.js");
 var Spotify = require("node-spotify-api");
 var Twitter = require("twitter");
-var request = require('request');
+var request = require("request");
+var fs = require("fs");
 
 var spotifyClient = new Spotify(keys.spotify);
-var client = new Twitter(keys.twitter);
+var twitterClient = new Twitter(keys.twitter);
 
 var argument = process.argv[2];
+
+var movieName = "";
+var song = "";
 
 switch(argument) {
 	case "my-tweets":
 		showTweets();
 		break;
 	case "spotify-this-song":
+		if (process.argv[3] === undefined) {
+			song = "The Sign";
+		} else {
+			song = process.argv[3];		
+		}
 		showSongInfo();
 		break;
 	case "movie-this":
+		if (process.argv[3] === undefined) {
+			movieName = "Mr. Nobody";
+		} else {
+			movieName = process.argv[3];		
+		}
 		showMovieInfo();
 		break;
 	case "do-what-it-says":
-		doText();
+		doLiri();
 		break;
 	default:
 		console.log("Enter a valid command");
 
 }
 
+function doLiri() {
+	fs.readFile("random.txt", "utf8", function(error, data) {
+		if (error) {return console.log(error)};
+
+		var dataArr = data.split(",");
+		argument = dataArr[0]
+		switch(argument) {
+			case "my-tweets":
+				showTweets();
+				break;
+			case "spotify-this-song":
+				song = dataArr[1];
+				showSongInfo();
+				break;
+			case "movie-this":
+				movieName = dataArr[1];
+				showMovieInfo();
+				break;
+			case "do-what-it-says":
+				doLiri();
+				break;
+			default:
+				console.log("Enter a valid command");
+		}
+	});
+
+}
+
 function showMovieInfo() {
-	var movieName = process.argv[3];
 	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&apikey=trilogy"
 
 	request(queryUrl, function (error, response, body) {
@@ -48,13 +89,6 @@ function showMovieInfo() {
 }
 
 function showSongInfo() {
-	var song = "";
-
-	if (process.argv.length < 4) {
-		song = "The Sign";
-	} else {
-		song = process.argv[3];		
-	}
 
 	spotifyClient.search({ type: 'track', query: song }, function(err, data) {
 	  if (err) {
@@ -72,7 +106,7 @@ function showSongInfo() {
 }
 
 function showTweets() {
-	client.get('statuses/user_timeline', {screen_name: 'thebigsamara'}, function(error, tweets, response) {
+	twitterClient.get('statuses/user_timeline', {screen_name: 'thebigsamara'}, function(error, tweets, response) {
 		if (error) {
 			console.log(error);
 		}
