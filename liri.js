@@ -1,8 +1,10 @@
 require("dotenv").config();
-var keys = require("./keys.js");
 
+var keys = require("./keys.js");
 var Spotify = require("node-spotify-api");
 var Twitter = require("twitter");
+var request = require('request');
+
 var spotifyClient = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
 
@@ -26,8 +28,27 @@ switch(argument) {
 
 }
 
+function showMovieInfo() {
+	var movieName = process.argv[3];
+	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&apikey=trilogy"
+
+	request(queryUrl, function (error, response, body) {
+	  if (error) {
+	    return console.log('Error occurred: ' + error);
+	  }
+	  console.log("Title:       " + JSON.parse(body).Title);
+	  console.log("Year:        " + JSON.parse(body).Year);
+	  console.log("IMDB Rating: " + JSON.parse(body).Ratings[0].Value);
+	  console.log("RT Rating:   " + JSON.parse(body).Ratings[1].Value);
+	  console.log("Country:     " + JSON.parse(body).Country);
+	  console.log("Language:    " + JSON.parse(body).Language);
+	  console.log("Plot:        " + JSON.parse(body).Plot);
+	  console.log("Actors:      " + JSON.parse(body).Actors);
+	});
+}
+
 function showSongInfo() {
-	var song = "happy";
+	var song = "";
 
 	if (process.argv.length < 4) {
 		song = "The Sign";
@@ -45,6 +66,8 @@ function showSongInfo() {
 	console.log(data.tracks.items[0].album.href);
 	console.log(data.tracks.items[0].album.name);
 	console.log("--------------------------");
+	console.log(process.argv.length);
+	console.log(song);
 	});
 }
 
