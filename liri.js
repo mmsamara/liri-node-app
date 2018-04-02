@@ -98,8 +98,7 @@ function showMovieInfo() {
 	  console.log("Title:       " + JSON.parse(body).Title);
 	  console.log("Year:        " + JSON.parse(body).Year);
 	  console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
-	  //console.log("RT Rating:   " + JSON.parse(body).Ratings[1].Value);
-	  console.log("RT Rating:   " + JSON.parse(body).Metascore + "%");
+	  console.log("RT Rating:   " + JSON.parse(body).Ratings[1].Value);
 	  console.log("Country:     " + JSON.parse(body).Country);
 	  console.log("Language:    " + JSON.parse(body).Language);
 	  console.log("Plot:        " + JSON.parse(body).Plot);
