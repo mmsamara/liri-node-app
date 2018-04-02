@@ -127,7 +127,7 @@ function showSongInfo() {
 
 function showTweets() {
 
-	var params = {screen_name: "TheBigSamara"};
+	var params = {screen_name: "Samara_SSB"};
 
 	//Use "twitter" npm package to print my tweets
 	twitterClient.get('statuses/user_timeline', params, function(error, tweets, response) {
@@ -138,9 +138,7 @@ function showTweets() {
 		for (var i = 0; i < 20; i++){
 			console.log("--------------------------");
 			console.log(tweets[i].text);
-			//console.log("Tweeted on " + tweets[i].created_at);
-			//console.log(JSON.stringify(tweets[i].text, null, 2));
-			console.log("--------------------------");
+			console.log(tweets[i].created_at);
 		}
 	});
 }
