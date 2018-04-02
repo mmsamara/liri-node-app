@@ -94,14 +94,17 @@ function showMovieInfo() {
 
 	  //Take in the text from the queryUrl and convert it to a JSON object using JSON.parse
 	  //Then use dot notation to print specified parts
+	  console.log("--------------------------");
 	  console.log("Title:       " + JSON.parse(body).Title);
 	  console.log("Year:        " + JSON.parse(body).Year);
-	  console.log("IMDB Rating: " + JSON.parse(body).Ratings[0].Value);
-	  console.log("RT Rating:   " + JSON.parse(body).Ratings[1].Value);
+	  console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
+	  //console.log("RT Rating:   " + JSON.parse(body).Ratings[1].Value);
+	  console.log("RT Rating:   " + JSON.parse(body).Metascore + "%");
 	  console.log("Country:     " + JSON.parse(body).Country);
 	  console.log("Language:    " + JSON.parse(body).Language);
 	  console.log("Plot:        " + JSON.parse(body).Plot);
 	  console.log("Actors:      " + JSON.parse(body).Actors);
+	  console.log("--------------------------");
 	});
 }
 
@@ -124,21 +127,20 @@ function showSongInfo() {
 
 function showTweets() {
 
+	var params = {screen_name: "TheBigSamara"};
+
 	//Use "twitter" npm package to print my tweets
-	twitterClient.get('statuses/user_timeline', {screen_name: 'TheBigSamara'}, function(error, tweets, response) {
+	twitterClient.get('statuses/user_timeline', params, function(error, tweets, response) {
 		if (error) {
 			console.log(error);
 		}
 
-		console.log("TWEETS BY @thebigsamara");
 		for (var i = 0; i < 20; i++){
-			console.log(tweets[i]);
-			//var myTweet = tweets[i].full_text;
-			//console.log("--------------------------");
-			//console.log(myTweet);
+			console.log("--------------------------");
+			console.log(tweets[i].text);
 			//console.log("Tweeted on " + tweets[i].created_at);
 			//console.log(JSON.stringify(tweets[i].text, null, 2));
-			//console.log("--------------------------");
+			console.log("--------------------------");
 		}
 	});
 }
