@@ -15,7 +15,7 @@ var twitterClient = new Twitter(keys.twitter);
 //Takes in first user arg to figure out which function to run
 var argument = process.argv[2];
 
-//Initializing variables that will be provided by command line of random.txt file
+//Initializing movie/ song variables and setting them equal to arrays starting at the index of 3
 var movieName = "";
 var song = "";
 
@@ -26,19 +26,21 @@ switch(argument) {
 		break;
 	case "spotify-this-song":
 		//Checks if no second argument was provided and if so, gives song info for the "The Sign" 
-		if (process.argv[3] === undefined) {
+		if (!process.argv[3]) {
 			song = "The Sign";
 		} else {
-			song = process.argv[3];		
+			//Set "song" to the command line arguments array starting at index 3, then covert it to a string of all its elements combined
+			song = process.argv.slice(3).join(" ");	
 		}
 		showSongInfo();
 		break;
 	case "movie-this":
 		//Checks if no second argument was provided and if so, returns movie info for "Mr. Nobody"
-		if (process.argv[3] === undefined) {
+		if (!process.argv[3]) {
 			movieName = "Mr. Nobody";
 		} else {
-			movieName = process.argv[3];		
+			//Set "movieName" to the command line arguments array starting at index 3, then covert it to a string of all its elements combined
+			movieName = process.argv.slice(3).join(" ");		
 		}
 		showMovieInfo();
 		break;
@@ -104,10 +106,11 @@ function showMovieInfo() {
 }
 
 function showSongInfo() {
-
 	//Runs node-spotify-api npm package
 	spotifyClient.search({ type: 'track', query: song }, function(err, data) {
-	  if (err) {return console.log('Error occurred: ' + err);}
+	  if (err) {
+	  	return console.log('Error occurred: ' + err);
+	  }
 
 	  //Print song information to the console
 	  console.log("--------------------------");
@@ -116,27 +119,26 @@ function showSongInfo() {
 	  console.log(data.tracks.items[0].album.href);
 	  console.log(data.tracks.items[0].album.name);
 	  console.log("--------------------------");
-	  console.log(process.argv.length);
-	  console.log(song);
 	  });
 }
 
 function showTweets() {
 
 	//Use "twitter" npm package to print my tweets
-	twitterClient.get('statuses/user_timeline', {screen_name: 'thebigsamara'}, function(error, tweets, response) {
+	twitterClient.get('statuses/user_timeline', {screen_name: 'TheBigSamara'}, function(error, tweets, response) {
 		if (error) {
 			console.log(error);
 		}
 
 		console.log("TWEETS BY @thebigsamara");
 		for (var i = 0; i < 20; i++){
-			var myTweet = tweets[i].full_text;
-			console.log("--------------------------");
-			console.log(myTweet);
+			console.log(tweets[i]);
+			//var myTweet = tweets[i].full_text;
+			//console.log("--------------------------");
+			//console.log(myTweet);
 			//console.log("Tweeted on " + tweets[i].created_at);
 			//console.log(JSON.stringify(tweets[i].text, null, 2));
-			console.log("--------------------------");
+			//console.log("--------------------------");
 		}
 	});
 }
